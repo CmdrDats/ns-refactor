@@ -178,7 +178,7 @@ Of course, the automatic removal of unused namespaces will, in time delete your 
 ```clojure
 (ns myapp.core)
 
-(defn #^{refactor/create-fns} use-add [n]
+(defn #^{:refactor/create-fns} use-add [n]
   (util/add-fn n n))
 ```
 
@@ -195,7 +195,7 @@ If you have multiple calls to `use-add` within a marked function:
 ```clojure
 (ns myapp.core)
 
-(defn #^{refactor/create-fns} use-add [n]
+(defn #^{:refactor/create-fns} use-add [n]
   (- (util/add-func n n n) (util/add-func n n))
 ```
 
