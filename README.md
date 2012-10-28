@@ -23,6 +23,22 @@ A couple of broad goals:
 
 This project is still heavily under construction. The readme is built first to provide a clear outline of the goals for ns-refactor.
 
+## Important
+
+Because of the dynamic nature of clojure, ns-refactor assumes that you adhere to a couple of coding conventions - If you deviate from these, you may have some unexpected behaviour.
+
+ - Prefer (:require [the.namespace :as tns]) forms in your ns declaration.
+ - Use only the top ns declaration for :require, :use and :import. Any other esoteric ways (like calling (use 'clojure.pprint)) inside your file body won't be considered.
+ - Make your top level function names unique and don't shadow the name within a more local scope. For example *don't* do this:
+```clojure
+(defn foo [])
+(defn bar []
+  (let [foo 2]
+    (+ foo 3)))
+```
+ - All comments and non-list items (like strings) that occur *before* a form like function definition or namespace is marked as belonging to that form, so for movement refactoring it will take that along.
+ 
+
 ## Installation
 
 Simply checkout and `lein run [path]` ns-refactor:
@@ -58,13 +74,13 @@ If you have this :
   (add n n))
 ```
 
-And you'd really prefer to have your `add` function in the myapp.util namespace, you can add a metadata hint, `#{:refactor/move 'myapp.util}` to it:
+And you'd really prefer to have your `add` function in the myapp.util namespace, you can add a metadata hint, `^{:refactor/move 'myapp.util}` to it:
 
 ```clojure
 (ns myapp.core
   (:require [myapp.util :as util]))
 
-(defn #{:refactor/move 'myapp.util} add [x y]
+(defn ^{:refactor/move 'myapp.util} add [x y]
   (+ x y))
 
 (defn use-add [n]
@@ -102,10 +118,10 @@ Again, if you have:
   (add n n))
 ```
 
-You can add a metadata hint `#{:refactor/rename 'adding}` and to the add function, like so :
+You can add a metadata hint `^{:refactor/rename 'adding}` and to the add function, like so :
 
 ```clojure
-(defn #{:refactor/rename 'adding} add [x y]
+(defn ^{:refactor/rename 'adding} add [x y]
   (+ x y))
 
 (defn use-add [n]
