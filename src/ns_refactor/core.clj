@@ -2,6 +2,7 @@
   (:use [midje.sweet])
   (:use [clojure.tools.logging])
   (:require [swank.swank])
+  (:require [ns-refactor.web :as web])
   (:require [ns-reloader.core :as tracker])
   (:require [ns-reloader.scaffold :as scaf]))
 
@@ -25,7 +26,8 @@
 (defn -main
   [& args]
   (swank.swank/start-repl 4005 :host "0.0.0.0")
-  (scaf/start-tracker-with-scaffold ["src" "checkouts"] 2500 #(info "Reloading..."))
+  ;(scaf/start-tracker-with-scaffold ["src" "checkouts"] 2500 #(info "Reloading..."))
+  (web/start 8080)
   )
 
 
